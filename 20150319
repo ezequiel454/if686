@@ -1,0 +1,24 @@
+double :: [Int] -> [Int]
+double [] = []
+double (x:xs) = x*2:double(xs)
+
+sumPairs :: [Int] -> [Int] -> [Int]
+sumPairs l [] = l
+sumPairs [] l = l
+sumPairs (x:xs) (a:as) = (x+a):sumPairs (xs) (as)
+
+member :: [Int] -> Int -> Bool
+member [] x = False
+member (x:xs) a | (a == x) = True
+				| otherwise = member (xs) a
+				
+digits :: String -> String
+digits	[] = []
+digits (x:xs) | member2 ['0','1','2','3','4','5','6','7','8','9'] x = x:digits(xs)
+				|otherwise = digits(xs)
+
+				
+member2 :: [Char] -> Char -> Bool
+member2 [] x = False
+member2 (x:xs) a | (a == x) = True
+				| otherwise = member2 (xs) a
