@@ -22,3 +22,17 @@ member2 :: [Char] -> Char -> Bool
 member2 [] x = False
 member2 (x:xs) a | (a == x) = True
 				| otherwise = member2 (xs) a
+
+quicksort :: [Int] -> [Int]
+quicksort [] = []
+quicksort (x:xs) = (quicksort (menores  x xs)) ++ [x] ++ (quicksort (maiores  x xs))
+
+menores :: Int -> [Int] -> [Int]
+menores x [] = []
+menores x (a:as)  | x <= a = menores x as
+					| otherwise = a:menores x as
+					
+maiores :: Int -> [Int] -> [Int]
+maiores x [] = []
+maiores x (a:as)  | x > a = maiores x as
+					| otherwise = a:maiores x as
