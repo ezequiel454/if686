@@ -36,3 +36,4 @@ maiores :: Int -> [Int] -> [Int]
 maiores x [] = []
 maiores x (a:as)  | x > a = maiores x as
 					| otherwise = a:maiores x as
+					
