@@ -2,16 +2,19 @@ merge :: [Int] -> [Int] -> [Int]
 merge xs [] = xs
 merge [] ys = ys
 merge (x:xs) (y:ys) | x <= y = x:merge xs (y:ys)
-					| otherwise = y:merge ys (x:xs)
-
-split :: [a] -> ([a], [a])
-split [] = ([], [])
-split [x] = ([x], [])
-split (x:y:xys) = (x:xs, y:ys) where (xs, ys) = split xys	
-					
-									
+                                        | otherwise = y:merge ys (x:xs)
+ 
+ 
+split :: [a] -> Int -> ([a], [a])
+split [] _ = ([], [])
+split [x] _ = ([x], [])
+split l p =  ([a | a <- take p l],[b | b <- drop p l])
+                                       
+                                                                       
 mergesort :: [Int] -> [Int]
 mergesort [] = []
 mergesort [x] = [x]
-mergesort (xs) =  	let (a,b) = split xs
+mergesort (xs) =        let (a,b) = split xs (div (length xs) 2)
 					in merge (mergesort a) (mergesort b)
+
+
