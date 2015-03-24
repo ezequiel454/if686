@@ -29,3 +29,55 @@ mergesort (xs) =        let (a,b) = split xs (div (length xs) 2)
 
 
 
+
+
+-----------------------------------------------------------------------------Heapsort---------------------------------------------
+
+pegaElemento :: Int -> [Int] -> Int 
+pegaElemento 1 (a:as) = a
+pegaElemento x (a:as) = pegaElemento (x - 1) (as)
+
+pai :: Int -> [Int] -> Int
+pai 1 (a:as) = a
+pai x (a:as) = pegaElemento (div x 2) (a:as) 
+
+swap :: Int -> Int -> [Int] -> [Int]
+swap x1 x2 l =  inicio x1 l ++ [pegaElemento x2 l] ++ meio x1 x2 l ++ [pegaElemento x1 l] ++ fim x2 l
+
+heap :: Int -> [Int] -> [Int]
+heap x l
+	| x == (length l) + 1 = l
+    | pegaElemento x l <=  pai x l = heap (x + 1) l
+    | otherwise = heap (div x 2) (swap (div x 2) x l)
+
+inicio :: Int -> [Int] -> [Int]
+inicio 1 l = []
+inicio x (a:as) = a : inicio (x - 1) as
+
+meio :: Int -> Int -> [Int] -> [Int]
+meio p f (a:as)
+    | p >= 1 = meio (p - 1) (f-1) as
+    | f > 1 = a : meio p (f-1) as
+    | otherwise = []
+
+fim :: Int -> [Int] -> [Int]
+fim x (a:as)
+    | x > 1 = fim (x - 1) as
+    | otherwise = as
+
+sort :: [Int] -> [Int]
+sort [] = []
+sort l = heapSort (broke l) ++ [pegaElemento 1 l]
+
+broke :: [Int] -> [Int]
+broke [] = []
+broke (a:as) = as
+
+heapSort :: [Int] -> [Int]
+heapSort [] = []
+heapSort l = sort (heap 1 l)
+
+-------------------------------------------------------------------------------Fim de Heapsort-----------------------------------
+
+
+
