@@ -11,7 +11,7 @@ member :: [Int] -> Int -> Bool
 member [] x = False
 member (x:xs) a | (a == x) = True
 				| otherwise = member (xs) a
-				
+-------------------------------------------------------------------------------------------------------				
 digits :: String -> String
 digits	[] = []
 digits (x:xs) | member2 ['0','1','2','3','4','5','6','7','8','9'] x = x:digits(xs)
@@ -22,7 +22,7 @@ member2 :: [Char] -> Char -> Bool
 member2 [] x = False
 member2 (x:xs) a | (a == x) = True
 				| otherwise = member2 (xs) a
-
+-------------------------------------------------------------------------------------------------------
 quicksort :: [Int] -> [Int]
 quicksort [] = []
 quicksort (x:xs) = (quicksort (menores  x xs)) ++ [x] ++ (quicksort (maiores  x xs))
@@ -36,4 +36,52 @@ maiores :: Int -> [Int] -> [Int]
 maiores x [] = []
 maiores x (a:as)  | x > a = maiores x as
 					| otherwise = a:maiores x as
+					
+-------------------------------------------------------------------------------------------
+fibn :: Int -> [Int]
+fibn 0 = [] 
+--fibn n = (fib (n)) :  fibn (n-1)
+--fibn n = fibn(n-1) ++ [ (fib n)]
+
+fibn n = tiraZero (fibn(n-1) ++ [ checkPar(fib n)])
+
+checkPar :: Int -> Int
+checkPar n 
+	| mod n 2 == 0 = n
+	| otherwise = 0
+
+tiraZero :: [Int] -> [Int]
+tiraZero [] = []
+tiraZero (x:xs) 
+	| x == 0 = tiraZero xs
+	| otherwise = x: tiraZero xs 
+
+fib :: Int -> Int
+fib n 
+	| n == 0 = 0
+	| n == 1 = 1
+	| otherwise = fib (n-1) + fib (n-2)
+
+---------------------------------------------------------------------------------------------
+restoDez :: Int -> Int
+restoDez x 
+	| mod x 10 == x = x
+	| otherwise = (mod x 10) + restoDez (div x 10 ) 
+
+tup :: [Int] -> [(Int,Int)]
+tup [] = []
+tup (x:xs) = [(restoDez x, x)] ++ tup xs
+
+
+quicksort :: [(Int,Int)]-> [(Int,Int)]
+quicksort [] = []
+quicksort (x:xs) = ( quicksort [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (quicksort [ a | a <- xs ,  fst (a) > fst (x)])
+
+tiraTupla :: [(Int,Int)] -> [Int]
+tiraTupla [] = []
+tiraTupla (x:xs) = [(snd x)] ++ tiraTupla xs
+
+ordeQuest :: [Int] -> [Int]
+ordeQuest [] = []
+ordeQuest l = tiraTupla (quicksort (tup l))
 					
