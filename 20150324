@@ -1,3 +1,4 @@
+---------------------------------Mergesort----------------------------------------------
 merge :: [Int] -> [Int] -> [Int]
 merge xs [] = xs
 merge [] ys = ys
@@ -16,5 +17,15 @@ mergesort [] = []
 mergesort [x] = [x]
 mergesort (xs) =        let (a,b) = split xs (div (length xs) 2)
 					in merge (mergesort a) (mergesort b)
+					
+-- Complexidade do nosso mergeSort: log n significa log do tamanho da lista na base 2, ex: log 8 = 3 porque 3^2=8.
+-- Se a lista tiver n elementos vamos dividir essa lista (fase split) log n vezes, exemplo: [8,7,6,5,4,3,2,1] 
+-- vai virar [8,7,6,5], [4,3,2,1], depois [8,7], [6,5] , [4,3], [2,1], depois [8],[7],[6],[5],[4],[3],[2],[1],
+-- ou seja: foram necessários 3 splits ou melhor: log n splits. Daí fazemos os merges que vão comparar os elementos 1 a 1,
+-- depois 2 a 2, depois 4 a 4 e assim por diante até que se compare tudo (log n vezes) e cada merge não chega a ter
+-- n comparações, logo cada merge é O(n), e fazemos merges log n vezes, então a complexidade doo mergesort é (n log n)
+---------------------------------Fim de Mergesort---------------------------------------
+
+
 
 
