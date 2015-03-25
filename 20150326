@@ -1,0 +1,82 @@
+--Questão 1
+
+hash:: Int -> [Int] -> [(Int,Int)]
+hash _ [] = []
+hash i (x:xs) = [(x,hashMap x i (x:xs))] ++ hash i xs
+
+hashMap:: Int -> Int -> [Int] -> Int
+hashMap x i l = mod (x+i) (length l)
+
+quicksort::[(Int,Int)] -> [Int]
+quicksort [] = []
+quicksort [(x,y)] = [x]
+quicksort ((a,b):xs) = quicksort [(x,y)|(x,y) <- xs,y < b] ++ [a] ++ quicksort [(x,y)|(x,y) <- xs,y >= b]
+
+hashOrd :: Int -> [Int] -> [Int]
+hashOrd _ [] = []
+hashOrd i l = quicksort (hash i l)
+
+getN:: Int -> [Int] -> Int
+getN _ [] = 1
+getN x [y] = 0
+getN e (a:as) | (e == a) = 0
+              | otherwise = (1 + (getN e as))
+
+get:: Int -> Int -> [Int] -> (Int,Int)
+get e i (a:as) = (e,getN e (hashOrd i (a:as)))
+
+hasKey:: Int -> [Int] -> Bool
+hasKey _ [] = False
+hasKey i l | (i <0) = False
+           | (i<= (length l) -1) = True
+           | otherwise = False
+           
+put:: Int -> Int -> Int -> [Int] -> [Int]
+put i e ie (a:as) | (i>(length (a:as) - 1)) = (hashOrd ie (a:as)) ++ [e]
+                  | (i<0) = [e] ++ (hashOrd ie (a:as))
+                  | otherwise = troca i e (hashOrd ie (a:as))
+
+troca:: Int -> Int -> [Int] -> [Int]
+troca i e (a:as) | (i==(0)) = e:(as)
+                 | otherwise = a:troca (i-1) e as
+
+remove:: Int -> Int -> [Int] -> [Int]
+remove i ie (a:as) | (i>(length (a:as) - 1)) = (hashOrd ie (a:as)) ++ [0]
+                   | (i<0) = [0] ++ (hashOrd ie (a:as))
+                   | otherwise = troca i 0 (hashOrd ie (a:as))
+
+--Executando--
+
+--print (hashOrd 1 [6,4,1,3,5,2])
+--print (get 3 1 [6,4,1,3,5,2])
+--print (hasKey 6 [6,4,1,3,5,2])
+--print (put 3 7 1 [6,4,1,3,5,2])
+--print (remove 3 1 [6,4,1,3,5,2])
+
+--Questão 2
+
+comparaConjuntos:: (Eq t) => [t] -> [t] -> String
+comparaConjuntos l1 l2 | ((inter l1 l2) == []) = "Conjuntos disjuntos"
+                       | (l1 == l2) = "A igual a B"
+                       | (not ((inter l1 l2) == l1)), (not ((inter l1 l2)== l2)) = "A intersiona B"
+                       | ((diff l1 l2) == []) = "B contem A"
+                       | ((diff l2 l1) == []) = "A contem B"
+
+member :: (Eq a) => a -> [a] -> Bool
+member _ [] = False
+member x (l:ls)
+	| x == l = True
+	| otherwise = member x ls
+
+union :: (Eq a) => [a] -> [a] -> [a]
+union xs [] = xs
+union [] ls = ls
+union (x:xs) ls
+	| (member x ls) = union xs ls
+	| otherwise = union xs $ [x] ++ ls
+
+inter :: (Eq a) => [a] -> [a] -> [a]
+inter xs ls = [ el | el <- (union xs ls), (member el xs), (member el ls) ]
+
+diff :: (Eq a) => [a] -> [a] -> [a]
+diff xs ls = [ el | el <- (inter xs xs), not $ member el ls]
