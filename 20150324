@@ -81,3 +81,108 @@ heapSort l = sort (heap 1 l)
 
 
 
+----------------------------------------------------------AULA SLIDE 2-----------------------------------------------------------------------------------
+
+
+
+menorMaior :: Int -> Int -> Int -> (Int,Int)
+menorMaior a b c = (meno, maio)
+	where
+		meno = menor a b c
+		maio = maior a b c
+
+menor :: Int -> Int -> Int -> Int
+menor a b c 
+	| (a <= b && a <= c) = a
+	| (b <= a && b <= c) = b
+	| otherwise = c
+
+
+maior :: Int -> Int -> Int -> Int
+maior a b c 
+	| (a >= b && a >= c) = a
+	| (b >= a && b >= c) = b
+	| otherwise = c
+--------------------------------------------------------------------i
+ordenaTripla :: (Int,Int,Int) -> (Int,Int,Int)
+ordenaTripla (a,b,c) 
+	| (a <= b) , (a <= c) , (b <= c) = (a, b, c)
+	| (a <= b) , (a <= c) , (c <= b) = (a, c, b)
+	| (b <= a) , (b <= c) , (a <= c) = (b, a, c)
+	| (b <= a) , (b <= c) , (c <= a) = (b, c, a)
+	| (c <= a) , (c <= b) , (a <= b) = (c, a, b)
+	| (c <= a) , (c <= b) , (b <= a) = (c, b, a)
+--------------------------------------------------------------------
+type Ponto = (Float, Float)
+type Reta = (Ponto, Ponto)
+
+coor1 :: Ponto -> Float
+coor1 (a,b) = a
+
+coor2 :: Ponto -> Float
+coor2 (a,b) = b
+
+vert :: Reta -> Bool
+vert (a,b) 
+	| coor1 (a) == coor1 (b) = True
+	| otherwise = False 
+
+--------------------------------------------------------------------
+
+pontoY :: Float -> Reta -> Float
+pontoY x (a,b) 
+	| vert (a,b) == True = 0
+	| otherwise = (((coor2 (b) - coor2 (a)) / (coor1 (b) - coor1 (a))) * (x - coor1 (a))) + coor2 (a)
+
+---------------------------------------------------------------------
+
+type Pessoa = String
+type Livro = String
+type BancoDados = [(Pessoa,Livro)]
+
+baseExemplo :: BancoDados
+baseExemplo = 
+ [("Sergio","O Senhor dos Aneis"),
+ ("Andre","Duna"),
+ ("Fernando","Jonathan Strange & Mr. Norrell"), 
+ ("Fernando","The Game of Thrones")]
+
+livros :: BancoDados -> Pessoa -> [Livro]
+livros bd ppl = [l | (p,l) <- bd, ppl == p ]
+
+
+emprestimos :: BancoDados -> Livro ->[Pessoa]
+emprestimos bd llv = [p | (p,l) <- bd, llv == l]
+
+emprestado :: BancoDados -> Livro -> Bool
+emprestado bd llv = if (length ([p | (p,l) <- bd, llv == l]) /= 0) then True 
+	else False
+
+qtdEmprestimos :: BancoDados -> Pessoa -> Int
+qtdEmprestimos bd ppl = conte ([l | (p,l) <- bd, ppl == p ])
+
+conte :: [Livro] -> Int
+conte [] = 0
+conte (x:xs) = 1 + conte xs
+
+devolver :: BancoDados -> Pessoa -> Livro -> BancoDados
+devolver bd ppl llv = [(p,l) | (p,l) <- bd , llv == l , ppl == p]
+
+-------------------------------------------------------------------
+quicksort :: [(Int,Int)]-> [(Int,Int)]
+quicksort [] = []
+quicksort (x:xs) = ( quicksort [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (quicksort [ a | a <- xs ,  fst (a) > fst (x)])
+
+
+--------------------------------------------------------------------
+
+getWord :: String -> String
+getWord [] = []
+getWord (x:xs) 
+	| x /= ' ' = x: getWord xs
+	|otherwise = []
+
+--dropWord :: String -> String
+--dropSpace :: String -> String
+--type Word = String
+--splitWords :: String -> [Word]
