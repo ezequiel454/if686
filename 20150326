@@ -80,3 +80,40 @@ inter xs ls = [ el | el <- (union xs ls), (member el xs), (member el ls) ]
 
 diff :: (Eq a) => [a] -> [a] -> [a]
 diff xs ls = [ el | el <- (inter xs xs), not $ member el ls]
+
+
+---------------------------------------------------AULA EXERCICIOS----------------------------------------------
+take1 :: Int -> [a] -> [a]
+take1 _ [] = []
+take1 a (x:xs)
+	| a == 0 = [] 
+	| otherwise = x:take(a-1) xs
+
+drop1 :: Int -> [a] -> [a]
+drop1 _ [] = []
+drop1 a (x:xs) 
+	| a == 0 = x:drop1 a xs
+	| otherwise = drop1 (a-1) xs
+	
+
+takewhile :: (a->Bool) -> [a] -> [a]
+takewhile _ [] = []
+takewhile f (x:xs)
+	| f x == True = x:takewhile f xs
+	| otherwise = []
+	
+
+dropwhile :: (a->Bool) -> [a] -> [a]
+dropwhile _ [] = []
+dropwhile f (x:xs) 
+	| f x == True =  dropwhile f xs
+	| otherwise = (x:xs)
+	
+	
+quicksort :: Ord t => [(t,t)]-> [(t,t)]
+quicksort [] = []
+quicksort (x:xs) = ( quicksort [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (quicksort [ a | a <- xs ,  fst (a) > fst (x)])
+
+quicksort1 :: Ord t => [t]-> [t]
+quicksort1 [] = []
+quicksort1 (x:xs) = ( quicksort1 [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (quicksort1 [ a | a <- xs ,  fst (a) > fst (x)])
