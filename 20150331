@@ -90,3 +90,33 @@ filtroMediana l n
 	| otherwise = [[0]]  
 
 --EX DE TESTE  [[9,4, 5, 0, 8],[10 ,3, 2 ,1 ,7],[9, 1, 6 ,3, 15],[0 ,3 ,8, 10 ,1],[1, 16 ,9, 12, 7]] 3
+
+
+
+
+-------------------------------------------Aula-------------------------------------------------------------------
+--questao1
+
+first :: String -> [Int] -> [(Int,Int,Char)] -> Int -> [Int] -> Bool
+first [] _ _ _ _ = False
+first (x:xs) l ((a,b,c):zs) d (f:fs) =  check (afd (x:xs) l ((a,b,c):zs) d (f:fs)) (f:fs) 
+
+check :: Int -> [Int] -> Bool
+check d [] = False
+check d (f:fs) 
+	| d == f = True
+	| otherwise = check d fs
+
+afd :: String -> [Int] -> [(Int,Int,Char)] -> Int -> [Int] -> Int
+afd [] _ _ z _ = z 
+afd (x:xs) l ((a,b,c):zs) d (f:fs) 
+	| (d == a) && (c == x) = afd xs l ((a,b,c):zs) b (f:fs)
+	| otherwise = afd xs l ((a,b,c):zs) (look x zs d) (f:fs)
+	
+look :: Char ->  [(Int,Int,Char)] -> Int -> Int 
+look ' ' _ _ = 0
+look x ((a,b,c):zs) d
+	| (d == a) && (c == x) = b
+	| otherwise = look x zs d
+
+------------------------------------------------------------
