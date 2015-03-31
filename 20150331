@@ -1,0 +1,92 @@
+--Questão 01
+
+--Polimorfismo significa "muitas formas", é o termo definido em linguagens orientadas a objeto, como por exemplo Java.
+--No Polimorfismo temos dois tipos:
+--1) Polimorfismo Estático ou Sobrecarga
+--2) Polimorfismo Dinâmico ou Sobreposição
+--O Polimorfismo de sobrecarga se dá quando temos a mesma operação implementada várias vezes na mesma classe. 
+--A escolha de qual operação será chamada depende da assinatura dos métodos sobrecarregados
+--Acredito que em Haskell temos a vantagem de não precisar assinar métodos, os tipos das variáveis ou funções 
+--são pré-estabelecidos e as funções que vão se utilizar desses tipos são impleentados comumente sem nenhum recurso adicional
+--enquanto que em Java todas as funções que utilizam o objeto polimórfico precisam definir qual seu tipo, e geralmente em Java
+--há muitas funções se relacionando de modo que o tipo que é passado de uma pra outra precisa estar definido.
+--A desvantagem de se utilizar polimorfismo de sobrecarga em Haskell é que os objetos ficam mais soltos e o registro fica mais
+--difícil de ser analisado e de se descobrir erros com relação aos tipos que estão sendo usados, em Java a plataforma acusa logo
+--qual o tipo que tal função pode receber.
+
+
+--QUESTAO 2
+comparar :: String -> [(Int,Char)]
+comparar [] = []
+comparar (x:[]) = [(1,x)]
+comparar (x:xs) =  [(check x xs, x)] ++ comparar xs
+
+
+check :: Char -> String -> Int
+check a [] = 1
+check a (x:xs) 
+	| a == x = 1 + check a xs
+	| otherwise = 1	
+
+tiraRepeticao :: [(Int,Char)] -> String
+tiraRepeticao (x:[]) = show (fst x)  ++ [snd x] 
+tiraRepeticao (x:y:xs) 
+	| snd x == snd y = tiraRepeticao (x:xs)
+	| otherwise =  show (fst x)  ++ [snd x] ++ tiraRepeticao (y:xs)
+
+
+look :: String -> Int -> String
+look [] _ = []
+look a 1 = a
+look l n = look (tiraRepeticao (comparar l)) (n-1)	
+
+
+--EX DE TESTE "1" 4
+
+----------------------------------------------------------------
+--QUESTAO 4
+agrupar :: [Int] -> Int -> Int -> Int -> Int -> [Int]
+agrupar [] _ _ _ _ = []
+agrupar l n i ns c
+	| ns + c < n = [l!!(i+c)] ++  [l!!(i-c)] ++ agrupar l n i ns (c+1)
+	| otherwise = [l!!i]
+
+
+checkN :: [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> [Int]
+checkN [] [] [] _ _ _ = []
+checkN f l s c n len 
+	| c == 0 = [0] ++ checkN f l s (c+1) n len 
+	| c == len-1 = [0]
+	| ((div n 2) <= c && c < (length l ) - (div n 2)) == False = [0] ++ checkN f l s (c+1) n len
+	| otherwise = [mediana (quicksort ((agrupar f n c (div n 2) 1) ++ (agrupar l n c (div n 2) 1) ++ (agrupar s n c (div n 2) 1)))] ++ checkN f l s (c+1) n len 
+
+quicksort :: [Int] -> [Int]
+quicksort [] = []
+quicksort (x:xs) = ( quicksort [a | a <- xs , a  <=  x ]) ++ [x] ++ (quicksort [ a | a <- xs , a > x])
+
+
+mediana :: [Int] -> Int
+mediana [] = 0
+mediana x
+	| mod (length x)  2 == 1 = x!!(div (length x) 2) 
+	| otherwise =  div ((x!!((div (length x) 2)-1)) + (x!!(div (length x) 2))) 2 	
+
+
+chek2 :: [[Int]] -> Int -> Int -> Int -> [[Int]]
+chek2 [] _ _ _= []
+chek2 l t c n
+	| c == 1 = [(zero t)] ++ chek2 l t (c+1) n
+	| c == t = [(zero t)] 
+	| otherwise = [checkN (l!!(c-2)) (l!!(c-1)) (l!!(c)) 0 n t] ++ chek2 l t (c+1) n
+
+zero :: Int -> [Int]
+zero 0 = []
+zero n = [0] ++ zero (n-1)
+
+filtroMediana :: [[Int]]->Int -> [[Int]] 
+filtroMediana [] _ = []
+filtroMediana l n 
+	| n <= length l && (mod n 2 == 1) = chek2 l (length l) 1 n
+	| otherwise = [[0]]  
+
+--EX DE TESTE  [[9,4, 5, 0, 8],[10 ,3, 2 ,1 ,7],[9, 1, 6 ,3, 15],[0 ,3 ,8, 10 ,1],[1, 16 ,9, 12, 7]] 3
