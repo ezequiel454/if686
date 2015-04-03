@@ -117,3 +117,39 @@ quicksort (x:xs) = ( quicksort [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (q
 quicksort1 :: Ord t => [t]-> [t]
 quicksort1 [] = []
 quicksort1 (x:xs) = ( quicksort1 [a | a <- xs , fst (a) <= fst (x) ]) ++ [x] ++ (quicksort1 [ a | a <- xs ,  fst (a) > fst (x)])
+
+
+-----------------------------------------------------------------Agrupar
+
+
+agrupar :: Eq t =>  [[t]] -> [(t,Int)]
+agrupar [] = []
+agrupar l =  tiraRep (tupl (aux l))
+
+aux :: [[t]] -> [t]
+aux [] = []
+aux (x:xs)	=  x++aux xs
+
+tupl :: Eq t => [t] -> [(t,Int)]
+tupl [] = []
+tupl (x:xs) = [(x,(check x xs))] ++ tupl xs
+
+check :: Eq t => t -> [t] -> Int
+check a [] = 1
+check a (x:xs) 
+	| a == x = 1 + check a xs
+	| otherwise = check a xs
+
+tiraRep :: Eq t => [(t,Int)] -> [(t,Int)]
+tiraRep ((a,b):[]) = [(a,b)]
+tiraRep [] = []
+tiraRep ((a,b):xs) = [(a,b)] ++ tiraRep (checkDup (a,b) xs)
+
+checkDup :: Eq t => (t,Int) -> [(t,Int)] -> [(t,Int)]
+checkDup _ [] = []
+checkDup (a,b) ((c,d):xs) 
+	| a == c = checkDup (a,b) xs
+	| otherwise = [(c,d)] ++ checkDup (a,b) xs	
+
+
+-- ex: agrupar [“Fernando”, “Castor”]
