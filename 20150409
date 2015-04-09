@@ -1,20 +1,10 @@
 Trabalho 6
 Q1)
-data List t = Nill
-   | Cons (t, Int) (List t)
-  	deriving (Show, Eq)
-
 data Graph t = Nil
-	| No t (List t) (Graph t)
+	| No t [(t,Int)] (Graph t)
 		deriving (Show, Eq)
 
 --exemplo
--- let a = No 5 (Cons (8,2) Nill ) (No 6 (Cons (4,2) Nill) Nil)
+--let a = No 5 [(5,2),(4,5)] (No 6 [(5,6)] (No 7 [] Nil))
 
-Q2)
 
-graphProf :: Eq t => Graph t -> t -> Bool
-graphProf Nil c = False
-graphProf (No t a b) c
-	| c == t = True
-	| otherwise = graphProf b c
