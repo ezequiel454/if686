@@ -1,10 +1,22 @@
 Trabalho 6
+-- 2 tipos de grap pois n sabia se poderia fazer o graph com uma lista na sua definição ou se era necessario cria um novo data que no exemplo seria a lista
+
 Q1)
 data Graph t = Nil
 	| No t [(t,Int)] (Graph t)
 		deriving (Show, Eq)
+		
+data List t = Nill
+   | Cons (t, Int) (List t)
+ 	deriving (Show, Eq)
 
+ data Graph2 t = Nil
+	| No t (List t) (Graph2 t)
+ 		deriving (Show, Eq)
+ 
 --exemplo
+--- let a = No 5 (Cons (8,2) Nill ) (No 6 (Cons (4,2) Nill) Nil)
+--exemplo2 com graph2
 --let a = No 5 [(5,2),(4,5)] (No 6 [(5,6)] (No 7 [] Nil))
 
 
