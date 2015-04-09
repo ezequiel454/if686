@@ -1,0 +1,10 @@
+data List t = Nill
+   | Cons (t, Int) (List t)
+  	deriving (Show, Eq)
+
+data Graph t = Nil
+	| No t (List t) (Graph t)
+		deriving (Show, Eq)
+
+--exemplo
+-- let a = No 5 (Cons (8,2) Nill ) (No 6 (Cons (4,2) Nill) Nil)
