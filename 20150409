@@ -25,6 +25,7 @@ data List t = Nill
 import Data.Char
 
 
+
 raiz :: [Float] -> [Float]
 raiz [] = []
 raiz l = map sqrt l
