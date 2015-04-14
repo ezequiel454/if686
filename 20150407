@@ -10,3 +10,32 @@ toList (Cons a b) = a : toList b
 fromList :: [t] -> List t
 fromList [] = Nil
 fromList (x:xs) = Cons x (fromList xs) 
+
+depth :: Tree t -> Int
+depth NilT = 0
+depth (No n esq dir) = 1 + max (depth esq) (depth dir)
+
+collapse :: Tree t -> [t]
+collapse NilT = []
+collapse (No n esq dir) = collapse esq ++ [n] ++ collapse dir 
+
+dfs :: (Show a) => (Tree a) -> String
+dfs tree = p $ f tree
+	where
+            f NilT = []
+            f (No n esq dir) = n : (f esq) ++ (f dir)
+            p [x] = (show x) ++ "."
+            p (x:xs) = (show x) ++ ", " ++ p xs
+
+
+
+
+bfs :: (Eq t) => Tree t -> t -> Bool
+bfs NilT _ = False
+bfs (Node n l r) x
+   | n == x = True
+   | otherwise = False || bfs l x|| bfs r x
+
+mapTree :: (t -> u) -> Tree t -> Tree u
+mapTree _ NilT = NilT
+mapTree f (Node n l r) = (Node (f n) (mapTree f l) (mapTree f r))
