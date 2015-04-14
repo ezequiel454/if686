@@ -20,3 +20,38 @@ data List t = Nill
 --let a = No 5 [(5,2),(4,5)] (No 6 [(5,6)] (No 7 [] Nil))
 
 
+--EXERCICIOS DE SLIDE
+
+import Data.Char
+
+
+raiz :: [Float] -> [Float]
+raiz [] = []
+raiz l = map sqrt l
+
+--import Data.Char.Ord
+
+position  :: Char -> Int
+position a = (ord a) - 96
+
+posicaoAlfabeto :: String -> [Int]
+posicaoAlfabeto s = map position s
+
+map2 :: (t -> u) -> [t] -> [u]
+map2 f [] = []
+map2 f l = [f a | a <- l]
+
+fold :: (t -> t -> t) -> [t] -> t
+fold f [a] = a
+fold f (a:as) = f a (fold f as)
+
+member :: (Eq t) => t -> [t] -> Bool
+member x l = foldr (||) False (map (==x) l)
+
+union :: [t] -> [t] -> [t]
+
+
+unir :: (Eq t) => t -> [t] -> [t]
+unir x lis 
+   |member x lis = lis
+   |otherwise = x:lis
