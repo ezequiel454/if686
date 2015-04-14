@@ -5,14 +5,26 @@ compose g (f:fs) = ((g . f) : compose g fs)
 
 
 --Questao 2 
-foldGraph:: Eq a => (a->a) -> a -> Graph
-foldGraph f z []     = z
-foldGraph f z (x:xs) = f x (foldGraph f z xs) 
+mapGraph :: (a -> b) -> Graph a -> Graph b
+mapGraph _ Nil = Nil
+mapGraph f (Node1 n a g) = ((Node1 (f n)) (mapAdjacente f a) (mapGraph f g))
 
-mapGraph: Eq a => (a -> b) -> [Graph] -> [b]
-mapGraph f [] = []
-mapGraph f x = f x
-mapGraph f (x:xs) = f x (mapGraph f xs)
+mapAdjacente :: (a -> b) -> [(a, Int)] -> [(b, Int)]
+mapAdjacente _ [] = []
+mapAdjacente f ((i, p):xs) = (((f i), p): mapAdjacente f xs)
+
+teste :: Graph Int
+teste = (Node1 1 [(2, 1), (3, 3),(4,4)] (Node1 2 [(2, 2),(3,3)] (Node1 3 [(3,3),(4,4)] (Node1 4 [(1,2),(4,1)] (Nil)))))
+
+mapGraph (times2) teste
+foldGraph (+) teste
+
+foldGraph :: (Num a) => (a -> a -> a) -> Graph a -> a
+foldGraph _ Nil = 0
+foldGraph f (Node1 n a g) = f n (foldGraph f g)
+
+times2 :: Int -> Int
+times2 n = 2 * n
 
 
 
