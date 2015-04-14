@@ -1,0 +1,43 @@
+QUESTAO 1
+compose :: (t -> t) -> [(t -> t)] -> [(t -> t)]
+compose g [] = []
+compose g (f:fs) = ((g . f) : compose g fs)
+
+
+--Questao 2 
+foldGraph:: Eq a => (a->a) -> a -> Graph
+foldGraph f z []     = z
+foldGraph f z (x:xs) = f x (foldGraph f z xs) 
+
+mapGraph: Eq a => (a -> b) -> [Graph] -> [b]
+mapGraph f [] = []
+mapGraph f x = f x
+mapGraph f (x:xs) = f x (mapGraph f xs)
+
+
+
+QUESTÃO 3-- não esta perfeita, flata uma recursao mais forte, aqui eu so tneho certeza de cheka ate 3 filhos enraizados
+filterTree :: (t->Bool) -> Tree t -> [Tree t]
+filterTree f NilT = []
+filterTree f (Node n a b) 
+	| f n = [   (Node n (check2 f a ) (check2 f b)) ] ++ (filterTree f (check f a)) ++ (filterTree f (check f b))
+	| otherwise = (filterTree f a) ++ (filterTree f b)
+
+
+check2 ::  (t->Bool) -> Tree t -> Tree t
+check2 f NilT = NilT
+check2 f (Node n l r) 
+   | f n = (Node n (check2 f l) (check2 f r))
+   | otherwise = NilT
+
+check :: (t->Bool) -> Tree t -> Tree t
+check f NilT = NilT
+check f (Node n l r) 
+	| f n =   joker  f [l,r]
+	| otherwise = (Node n l r)
+
+joker :: (t->Bool) -> [Tree t] -> Tree t 
+joker  _ [] = NilT
+joker f ((Node n l r):xs) 
+	| f n = joker f xs
+	| otherwise = (Node n l r)  
