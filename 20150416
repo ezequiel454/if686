@@ -1,0 +1,15 @@
+Questão 1
+quicksort :: Ord t => [t]-> [t]
+quicksort [] = []
+quicksort (x:xs) = ( quicksort [a | a <- xs , a <= x ]) ++ [x] ++ (quicksort [ a | a <- xs ,  a > x])
+
+
+filterr :: Ord a => [a] -> [a] -> [[a]]
+filterr [] a = [quicksort a]
+filterr (x:xs) a =  [quicksort [b | b <- a, b <= x ] ] ++ filterr xs [c | c <- a , c > x]
+
+listPartitioner :: Ord a => Num a => [a] -> ([a] -> [[a]])
+listPartitioner as = filterr (quicksort as)
+
+
+(listPartitioner [4, 13, 8]) [1..15]
