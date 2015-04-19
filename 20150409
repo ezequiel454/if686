@@ -49,10 +49,4 @@ fold f (a:as) = f a (fold f as)
 member :: (Eq t) => t -> [t] -> Bool
 member x l = foldr (||) False (map (==x) l)
 
-union :: [t] -> [t] -> [t]
 
-
-unir :: (Eq t) => t -> [t] -> [t]
-unir x lis 
-   |member x lis = lis
-   |otherwise = x:lis
