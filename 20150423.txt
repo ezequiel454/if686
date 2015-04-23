@@ -1,0 +1,157 @@
+--slide 2
+import Data.Char
+
+getWord :: String -> String
+getWord [] = []
+getWord (x:xs) 
+	| x /= ' ' = x: getWord xs
+	|otherwise = []
+
+dropWord :: String -> String
+dropWord [] = []
+dropWord (x:xs) 
+	| x /= ' ' = dropWord xs
+	| otherwise = xs
+
+dropSpace :: String -> String
+dropSpace [] = []
+dropSpace (x:xs) 
+	| x == ' ' = dropSpace xs
+	| otherwise = (x:xs)
+
+type Word = String
+splitWords :: String -> [Word]
+splitWords [] = []
+splitWords l  = [getWord l ] ++ splitWords (dropSpace (dropWord l))
+
+--slide 5
+--q1
+raiz :: (Num t, Floating t) =>  [t] -> [t]
+raiz [] = []
+raiz l = map sqrt l
+
+--q2
+position  :: Char -> Int
+position a = (ord a) - 96
+
+posicaoAlfabeto :: String -> [Int]
+posicaoAlfabeto s = map position s
+
+--q4
+member :: (Eq t) => t -> [t] -> Bool
+member x l = foldr (||) False (map (==x) l)
+--q5 unir
+unir :: (Eq t) => t -> [t] -> [t]
+unir x lis 
+   |member x lis = lis
+   |otherwise = x:lis
+
+union :: (Eq t) => [t] -> [t] -> [t]
+union a b = foldr unir (foldr unir [] a) b
+
+--q6
+trans :: [String] -> [Int]
+trans [] = []
+trans l = map position2 l
+
+position2  :: String -> Int
+position2 [] = 0
+position2  (x:xs) = ((ord x) - 96) + position2 xs
+
+--q7
+
+data Tree t = Null | No t (Tree t) (Tree t)
+   deriving (Show)
+
+insertElement :: Tree t -> t -> Tree t
+insertElement Null e = No e  Null Null
+insertElement (No t l r) e = No t (insertElement l e) r
+
+--q8
+criarArvore :: Ord t => [t] -> (Tree t -> t -> Tree t) -> Tree t
+criarArvore list insertElement = foldr tran Null list
+
+tran :: t -> Tree t -> Tree t 
+tran = \n tree -> insertElement tree n
+
+--q9
+funcFilter :: Int -> [[Int]] -> [[Int]]
+funcFilter n l = filter (\l -> (foldr (+) 0 l) >= n) l
+
+--q10
+inter :: (Ord t, Eq t) => [t] -> [t] -> [t]
+inter l1 l2 = removeDup (filter (\x -> x `elem` l2 ) l1)
+
+removeDup :: (Eq t) => [t] -> [t]
+removeDup [] = []
+removeDup (x:xs)
+    | x `elem` xs = removeDup xs
+    | otherwise = x:removeDup xs
+    
+--q11
+diff :: (Ord t, Eq t) => [t] -> [t] -> [t]
+diff l1 l2 = removeDup (filter f l1)
+    where f x = not (x `elem` l2)
+
+--q12 map.filter
+
+--q13
+paress :: [(t,v)] -> [t]
+paress l = map (\(x,y) -> x) l
+
+--q14
+compMaior :: [[Int]] -> Int -> [Int]
+compMaior l n = filter (>n) (map length l)
+
+--q15
+remDupli :: (Eq t) =>  [[t]] -> [t]
+remDupli l =  removeDup (foldr (++) [] l)
+
+--q16 map.folder
+
+https://blistering-heat-5295.firebaseio.com/#-JnUfwMsRJrzeaq_Qj_O|8cc52202fce662eaeb8e844ce3927465
+blistering-heat-5295.firebaseapp.com
+
+
+--Slide 6
+
+
+--q1
+sumc :: Int -> [Int]-> [Int]
+sumc x = (\ y -> map (+x) y)
+
+--q2
+maior :: [Int] -> Int
+maior = (\a -> foldr max 0 a)
+
+--q3
+arvBin :: (Eq t) => Tree t -> ( Tree t -> Bool )
+arvBin t = check t
+
+check :: (Eq t) => Tree t -> Tree t -> Bool
+check a b = verrificaIgual (collapse a) (collapse b) 
+
+verrificaIgual :: (Eq t) => [t] -> [t] -> Bool
+verrificaIgual [] [] = True
+verrificaIgual (x:xs) (y:ys) 
+	| x /= y = False
+	| otherwise = verrificaIgual xs ys
+
+
+collapse :: (Eq t) =>  Tree t -> [t]
+collapse Null = []
+collapse (No n esq dir) = collapse esq ++ [n] ++ collapse dir 
+--(No 6 (No 7 (Null) (Null)) (No 8 (No 4 (Null) (Null)) (Null)))
+
+--q4
+aplicaLista :: [Int] -> ([Int] -> [(Int,Int)])
+aplicaLista l = funcc l
+
+funcc :: [Int] -> [Int] -> [(Int,Int)]
+funcc _ [] = []
+funcc [] _ = []
+funcc (x:xs) (y:ys) = [(x,y)] ++ funcc xs ys
+
+
+
+
