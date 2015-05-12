@@ -39,3 +39,23 @@ bfs (Node n l r) x
 mapTree :: (t -> u) -> Tree t -> Tree u
 mapTree _ NilT = NilT
 mapTree f (Node n l r) = (Node (f n) (mapTree f l) (mapTree f r))
+
+
+data Tree t = Empty | Node t (Tree t) (Tree t) deriving (Eq)
+
+findElementInBFS :: (Eq a) => a -> Tree a -> Bool
+findElementInBFS x tree = tbf x [tree]
+    where
+        tbf _ [] = False
+        tbf x l =
+            (foldr (==) True (map (\y -> (==) x $ nodeValue y) l))
+            || (tbf x (concat (map leftAndRightNodes l)))
+
+
+
+        nodeValue (Node a _ _) = a
+        leftAndRightNodes (Node _ Empty Empty) = []
+        leftAndRightNodes (Node _ Empty b)     = [b]
+        leftAndRightNodes (Node _ a Empty)     = [a]
+        leftAndRightNodes (Node _ a b)         = [a,b]
+
