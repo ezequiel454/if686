@@ -1,0 +1,20 @@
+:main "(begin (define fat (lambda (n) (if (eqv? n 0) 1 (* (fat (- n 1)) n)))) (define result (fat 5)))" --120
+
+:main "(begin (define fib (lambda (n) (if (lt? n 3) 1 (+ (fib (- n 1)) (fib (- n 2)))))) (fib 10))" --55
+
+:main "(begin (define AreaTriangulo (let ((x 4) (y 2)) (let ((z (* x y)) (d 2)) (/ z d)))) AreaTriangulo)" --4
+
+:main "(begin (define basicCount (lambda (n) (if (lt? n 1) 0 (+ 1 (basicCount (- n 1)))))) (define res (basicCount 5)))" --5
+
+:main "(begin (define x (car '(1 2 3))) (define y (cdr '(4 5 6))) (define result (cons x y)))" --(1 5 6)
+
+:main "(begin (define a 10) (define b 20) (comment isso eh um comentario) (if (= (mod b a) 0) (/ b a) \"Nao divisivel\"))" --2
+
+:main "(begin (define paridade (lambda (n) (if (eqv? (mod n 2) 0) \"Eh par\" \"Nao eh par\"))) (paridade 32))" --"Eh par"
+
+:main "(begin (define a 9) (define b 10) (define result (if (lt? a b) (begin (set! a (* a 10)) a) (begin (set! b (* b 10)) b))) result)" --90
+
+:main "(begin (define x (mod 2 6)) (if (eqv? x 0) \"Divisao exata\" \"Divisao nao eh exata\"))" --"Divisao nao eh exata"
+
+:main "(begin (define juntar (lambda (list1 list2) (if (eqv? list1 '()) list2 (cons (car list1) (juntar (cdr list1) list2))))) (define separar (lambda (lista pivo list1 list2) (if (eqv? lista '()) (juntar (quicksort list1) (cons pivo (quicksort list2))) (if (lt? (car lista) pivo) (separar (cdr lista) pivo (cons (car lista) list1) list2) (separar (cdr lista) pivo list1 (cons (car lista) list2)))))) (define quicksort (lambda (lista) (if (eqv? lista '()) '() (separar (cdr lista) (car lista) '() '())))) (define x '(8 1 6 2 0 9 3 5 7 4)) (define result (quicksort x)))"
+--(0 1 2 3 4 5 6 7 8 9)
