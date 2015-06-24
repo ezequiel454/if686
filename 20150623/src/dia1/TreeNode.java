@@ -11,7 +11,7 @@ public class TreeNode<T extends Comparable < T >> {
 		leftNode = rightNode = null;
 	}
 	
-    public void insert (T insertValue){
+    public synchronized void insert (T insertValue){
     	
     	if (insertValue.compareTo (data) < 0){
     		if(leftNode == null){

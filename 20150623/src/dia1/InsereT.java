@@ -31,7 +31,7 @@ public class InsereT extends Thread {
 			value = randomNumber.nextInt(1000);
 			System.out.println(value);
 			tree.insertNode(value);
-			tree.inorderTraversal();
+		//	tree.inorderTraversal();
 		}
 
 	}
