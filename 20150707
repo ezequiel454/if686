@@ -1,0 +1,106 @@
+package aulas;
+import java.util.Random;
+
+/**
+ * Created by valbrand on 07/07/2015.
+ */
+public class MultMatriz {
+    static class ThreadMultiplicadora extends Thread {
+        private int[][] matrizA;
+        private int[][] matrizB;
+        private int[][] matrizResultado;
+        private int inicioCalculo;
+        private int fimCalculo;
+        private int index;
+ 
+        public ThreadMultiplicadora(int[][] matrizA, int[][] matrizB, int[][] matrizResultado, int inicioCalculo, int fimCalculo, int index) {
+            this.matrizA = matrizA;
+            this.matrizB = matrizB;
+            this.matrizResultado = matrizResultado;
+            this.inicioCalculo = inicioCalculo;
+            this.fimCalculo = fimCalculo;
+            this.index = index;
+        }
+ 
+        @Override
+        public void run() {
+            int linhas = this.matrizResultado.length;
+            int colunas = this.matrizResultado[0].length;
+ 
+            for (int i = inicioCalculo; i < fimCalculo; i++) {
+                int A = (i / colunas);
+                int B = (i % colunas);
+ 
+                this.matrizResultado[A][B] = 0;
+                for (int j = 0; j < matrizA[0].length; j++) {
+                    this.matrizResultado[A][B] += this.matrizA[A][j] * this.matrizB[j][B];
+                }
+            }
+        }
+    }
+ 
+    public static void imprimirMatriz(int[][] matriz) {
+        int linhas = matriz.length;
+        int colunas = matriz[0].length;
+ 
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                System.out.print(matriz[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+ 
+    public static void preencheMatriz(int[][] matriz) {
+        int linhas = matriz.length;
+        int colunas = matriz[0].length;
+        Random rng = new Random();
+ 
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                matriz[i][j] = rng.nextInt(5) + 1;
+            }
+        }
+    }
+    
+    
+ 
+ //int workload = (x * z) / numThreads; int workload = (int) Math.ceil((double) (x * z) / numThreads);
+    public static void main(String[] args) {
+    	double startTime = System.currentTimeMillis();
+        int x = 100, y = 10, z = 10, numThreads = 3;
+        int[][] matrizA = new int[x][y];
+        int[][] matrizB = new int[y][z];
+        int[][] matrizResultado = new int[x][z];
+        int workload = (int) Math.ceil((double) (x * z) / numThreads);
+        ThreadMultiplicadora[] threadMultiplicadoras = new ThreadMultiplicadora[numThreads];
+        
+        preencheMatriz(matrizA);
+        preencheMatriz(matrizB);
+ 
+        for (int i = 0; i < numThreads; i++) {
+            int inicio = i * workload;
+            int fim = Math.min((i + 1) * workload, (x * z));
+           // int fim = (i + 1) * workload;
+ 
+            threadMultiplicadoras[i] = new ThreadMultiplicadora(matrizA, matrizB, matrizResultado, inicio, fim, i);
+            threadMultiplicadoras[i].start();
+        }
+ 
+        for (int i = 0; i < numThreads; i++) {
+            try {
+                threadMultiplicadoras[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+ 
+        imprimirMatriz(matrizA);
+        System.out.println();
+        imprimirMatriz(matrizB);
+        System.out.println();
+        imprimirMatriz(matrizResultado);
+        double finishTime = System.currentTimeMillis();
+        System.out.println("Time: "+ (finishTime - startTime));
+    }
+}
